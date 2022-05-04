@@ -1,6 +1,6 @@
 # AppleFrenzy
 
-An iteration on the [Apple Picker Prototype]. 
+An iteration on the [Apple Picker Prototype](https://github.com/Shaman37/Prototype-Apple_Picker). 
 
 The game consists on 3 different colored barrels: green, red and golden.
 
