@@ -14,7 +14,7 @@ public class Wind : MonoBehaviour
     private ParticleSystem.VelocityOverLifetimeModule pVelocity;
     private float                                     readyTime;
     private float                                     stopTime;
-    public static bool                                isWindy = false;
+    public static bool                                IS_WINDY = false;
 
 
     #endregion
@@ -40,7 +40,7 @@ public class Wind : MonoBehaviour
         {
             if(Time.time > stopTime)
             {
-                isWindy = false;
+                IS_WINDY = false;
 
                 // Return the number of leaf particles and their velocity to normal
                 pEmission.rateOverTime = settings.normalLeafParticles;
@@ -65,7 +65,7 @@ public class Wind : MonoBehaviour
 
         if (chance < settings.windChance)
         {
-            isWindy = true;
+            IS_WINDY = true;
 
             // Wind StopTime and Cooldown calculations
             float timeStart = Time.time;

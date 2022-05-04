@@ -8,7 +8,7 @@ public class GameStateManager : MonoBehaviour
 {   
     // State related variables
     private BaseState currentState;
-    public static bool isGamePaused;
+    public static bool IS_GAME_PAUSED;
 
     // Root object for the different UI views
     [SerializeField] private UIRoot ui;

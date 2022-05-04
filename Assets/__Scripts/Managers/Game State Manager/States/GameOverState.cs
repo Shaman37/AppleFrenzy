@@ -10,7 +10,7 @@ public class GameOverState : BaseState
 
         Time.timeScale = 0;
         Cursor.visible = true;
-        GameStateManager.isGamePaused = true;
+        GameStateManager.IS_GAME_PAUSED = true;
 
         stateMachine.UI.GameOverView.OnPlayAgainClicked += PlayAgainClicked;
         stateMachine.UI.GameOverView.OnQuitClicked += QuitClicked;

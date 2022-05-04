@@ -83,13 +83,15 @@ public class AppleTree : MonoBehaviour
     {
         pos += Vector3.right * velocity * Time.deltaTime;
 
+        float edge = Camera.main.ViewportToWorldPoint(Vector3.right).x - 6f;
+
         // Check if the Apple Tree is within the set screen limit, else change it's velocity.
-        if(pos.x < -_settings.screenLimit)
+        if(pos.x < -edge)
         {
             velocity = Mathf.Abs(velocity);
         }
 
-        else if(pos.x > _settings.screenLimit)
+        else if(pos.x > edge)
         {
             velocity = -Mathf.Abs(velocity);
         }
@@ -109,7 +111,7 @@ public class AppleTree : MonoBehaviour
             int ndx;
             eAppleType type;       
 
-            if(Wind.isWindy)
+            if(Wind.IS_WINDY)
             {   
                 // If it is Windy, sticks may fall
                 ndx = Random.Range(0, _settings.appleFrequency.Length);

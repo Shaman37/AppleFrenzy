@@ -4,7 +4,6 @@ using UnityEngine;
 public class AppleTreeSettings : ScriptableObject{
 
     [Header("Tree Movement")]
-    public float        screenLimit;
     public float        treeVelocity;
     public float        chanceToChangeDirections;
 

@@ -18,7 +18,6 @@ public class Baskets : MonoBehaviour
     private float            swapStart;
     private bool             isSwapping = false;
     private bool             isRotationClockwise = false;
-    
     private float            screenLimit;
 
     #endregion
@@ -28,7 +27,6 @@ public class Baskets : MonoBehaviour
         
     private void Awake()
     {
-        screenLimit = settings.leftAndRightEdge;
 
         int ndx = 0;
         foreach (Transform child in transform)
@@ -42,8 +40,9 @@ public class Baskets : MonoBehaviour
 
     private void Update()
     {
-        if(!GameStateManager.isGamePaused)
+        if(!GameStateManager.IS_GAME_PAUSED)
         {
+            screenLimit = Camera.main.ViewportToWorldPoint(Vector3.right).x - 6f;
             HandleMouseMovement();
             HandleMouseInput();
         }
@@ -87,22 +86,17 @@ public class Baskets : MonoBehaviour
     
         Vector3 mousePos3D = Camera.main.ScreenToWorldPoint(mousePos2D);
         Vector3 pos = transform.position;
-    
-        if(mousePos3D.x < -screenLimit)
+        pos.x = mousePos3D.x;
+
+        if (pos.x < -screenLimit)
         {
             pos.x = -screenLimit;
         }
-
-        else if(mousePos3D.x > screenLimit)
+        else if (pos.x > screenLimit)
         {
             pos.x = screenLimit;
-        }
-
-        else
-        {
-            pos.x = mousePos3D.x;
-        }
-    
+        } 
+        
         transform.position = pos;
     }
 

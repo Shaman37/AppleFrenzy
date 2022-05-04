@@ -69,7 +69,7 @@ public class Apple : MonoBehaviour
     private void FixedUpdate()
     {
         // If windy, add a horizontal force to the apple
-        if(Wind.isWindy){
+        if(Wind.IS_WINDY){
             _rigid.AddForce(Vector3.right * 7.5f * _rigid.mass);
         }
     }

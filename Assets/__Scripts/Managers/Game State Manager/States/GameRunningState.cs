@@ -8,7 +8,7 @@ public class GameRunningState : BaseState
 
         Time.timeScale = 1;
         Cursor.visible = false;
-        GameStateManager.isGamePaused = false;
+        GameStateManager.IS_GAME_PAUSED = false;
 
         stateMachine.UI.GameView.Show();
     }
