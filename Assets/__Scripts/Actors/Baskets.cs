@@ -9,7 +9,7 @@ public class Baskets : MonoBehaviour
     #region Variables
         
     [Header("Settings")]
-    [SerializeField] private BasketSettings   settings;
+    [SerializeField] private BasketSettings settings;
 
     private List<GameObject> baskets = new List<GameObject>();
     private Vector3[]        fixedPositions = new Vector3[3];
@@ -27,7 +27,6 @@ public class Baskets : MonoBehaviour
         
     private void Awake()
     {
-
         int ndx = 0;
         foreach (Transform child in transform)
         {

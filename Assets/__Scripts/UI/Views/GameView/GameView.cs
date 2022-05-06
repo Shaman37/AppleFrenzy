@@ -10,14 +10,14 @@ public class GameView : BaseView
     [SerializeField] public ComboBar comboBar;
 
     private void OnEnable() {
-        ScoreManager.ScoreUpdate += comboBar.UpdateScore;
-        ScoreManager.ComboUpdate += comboBar.UpdateCombo;
+        ScoreManager.ScoreUpdate += comboBar.UpdateScoreText;
+        ScoreManager.ComboUpdate += comboBar.UpdateComboText;
         ScoreManager.LifeBonus += lives.UpdateLives;
     }
 
     private void OnDisable() {
-        ScoreManager.ScoreUpdate -= comboBar.UpdateScore;
-        ScoreManager.ComboUpdate -= comboBar.UpdateCombo;
+        ScoreManager.ScoreUpdate -= comboBar.UpdateScoreText;
+        ScoreManager.ComboUpdate -= comboBar.UpdateComboText;
         ScoreManager.LifeBonus -= lives.UpdateLives;
     }
 }

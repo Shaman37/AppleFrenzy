@@ -3,23 +3,70 @@ using UnityEngine.UI;
 
 public class ComboBar : MonoBehaviour
 {   
+    public float gradientSpeed = 10;
     // UI Variables
-    [SerializeField] private Text textScore;
-    [SerializeField] private Text textCombo;
-    [SerializeField] private Image comboBar;
+    private Text _textScore;
+    private Text _textCombo;
+    private Image _comboProgressBar;
+    private RectTransform _progressEdge;
+    private RectTransform _comboParticlesEdge;
+    private ParticleSystemRenderer _comboParticles;
 
-    public void UpdateCombo(int comboProgress, int comboMultiplier, bool updateMultiplier)
+
+    private float _hue;
+    private float _sat;
+    private float _bri;
+
+    private void Start()
+    {
+        _comboProgressBar = transform.Find("Combo Progress").GetComponent<Image>();
+        _progressEdge = _comboProgressBar.GetComponent<RectTransform>();
+
+        _comboParticlesEdge = _comboProgressBar.transform.Find("Combo Particles").GetComponent<RectTransform>();
+        _comboParticles = _comboParticlesEdge.GetComponent<ParticleSystemRenderer>();
+
+        _textCombo = transform.Find("Combo Multiplier").GetComponent<Text>();
+        _textScore = transform.Find("Score").GetComponent<Text>();
+    }
+
+    private void Update()
+    {
+        Color.RGBToHSV(_comboProgressBar.color, out _hue, out _sat, out _bri);
+
+        _hue += gradientSpeed / 7500;
+        if(_hue >= 1) _hue = 0;
+
+        _comboProgressBar.color = Color.HSVToRGB(_hue, _sat, _bri);
+
+        Vector3 newAnchor = _comboParticlesEdge.anchoredPosition;
+        newAnchor.x = -_progressEdge.rect.width / 2;
+        newAnchor.x += _progressEdge.rect.width * _comboProgressBar.fillAmount;
+
+        _comboParticlesEdge.anchoredPosition = newAnchor;
+        _comboParticles.material.color = Color.HSVToRGB(_hue, _sat , _bri);
+    }
+
+    public void UpdateComboText(int progress, int multiplier, bool updateMultiplier)
     {   
-        comboBar.fillAmount = (float) comboProgress / (comboMultiplier * 10);
+        if (progress > 0)
+        {
+            _comboParticles.gameObject.SetActive(true);
+        }
+        else
+        {
+            _comboParticles.gameObject.SetActive(false);
+        }
+
+        _comboProgressBar.fillAmount = (float) progress / (multiplier * 10);
 
         if (updateMultiplier)
         {
-            textCombo.text = "x" + comboMultiplier;
+            _textCombo.text = "x" + multiplier;
         }
     }
 
-    public void UpdateScore(int score)
+    public void UpdateScoreText(int score)
     {   
-        textScore.text = score.ToString();
+        _textScore.text = score.ToString();
     }
 }
