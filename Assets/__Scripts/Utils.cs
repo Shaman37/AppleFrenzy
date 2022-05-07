@@ -106,7 +106,7 @@ public class Utils : MonoBehaviour
   
 public class DeletePlayerPrefsScript : EditorWindow
 {
-    [MenuItem("Window/Delete PlayerPrefs (All)")]
+    [MenuItem("Developer/Delete PlayerPrefs (All)")]
     static void DeleteAllPlayerPrefs()
     {
         PlayerPrefs.DeleteAll();

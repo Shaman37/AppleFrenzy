@@ -25,11 +25,6 @@ public class GameStateManager : MonoBehaviour
         SetState(new GameRunningState());
     }
 
-    private void OnEnable() 
-    {
-        ScoreManager.GameOver += EndGame;
-    }
-
     /// <summary>
     ///     Casts the Update function inside the current game state every frame to listen for state changes.
     /// </summary>
@@ -37,10 +32,15 @@ public class GameStateManager : MonoBehaviour
     {
         currentState.Update();
     }
-        
+    
+    private void OnEnable() 
+    {
+        Messenger.AddListener(GameEvent.GAME_OVER, OnGameOver);
+    }
+
     private void OnDisable() 
     {
-        ScoreManager.GameOver -= EndGame;
+        Messenger.RemoveListener(GameEvent.GAME_OVER, OnGameOver);
     }
     #endregion
 
@@ -64,7 +64,7 @@ public class GameStateManager : MonoBehaviour
     /// <summary>
     ///     Responsible for changing the current game state to a new one.
     /// </summary>
-    public void EndGame()
+    public void OnGameOver()
     {
         SetState(new GameOverState());
     }

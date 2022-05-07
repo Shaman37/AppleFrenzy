@@ -11,43 +11,33 @@ public class AppleTree : MonoBehaviour
 {   
     #region Variables
     
-    [Header("Settings")]
     [SerializeField] private AppleTreeSettings _settings;
     [SerializeField] private AppleSettings[]   _appleSettings;
+    [SerializeField] private GameObject _prefabApple;
 
-    private Dictionary<eAppleType, AppleSettings> APPLE_DICT;
+    private Dictionary<eAppleType, AppleSettings> _appleDict;
     
-    private Vector3   pos;
-    private float     velocity;
-    private float     velocityIncrease;
-    private float     waitingTimeIncrease;
-
+    private float _velocity;
+    private float _velocityIncrease;
+    private float _waitingTimeModifier;
 
     #endregion
-
 
     #region Unity Event Methods
 
     private void Awake() 
     {
-        velocity = _settings.treeVelocity;
-        pos = transform.position;
-
+        _velocityIncrease = 0;
+        _waitingTimeModifier = 0;
+        _velocity = _settings.treeVelocity;
+        
         // Create a Dictionary with the different Apple Types and corresponding Settings
-        APPLE_DICT = new Dictionary<eAppleType, AppleSettings>();
+        _appleDict = new Dictionary<eAppleType, AppleSettings>();
         foreach (AppleSettings settings in _appleSettings)
         {
-            APPLE_DICT[settings.type] = settings; 
+            _appleDict[settings.type] = settings; 
         }
-
-        velocityIncrease = 0;
-        waitingTimeIncrease = 0;
     }
-
-    private void OnEnable() {
-        ScoreManager.NextLevel += IncreaseDifficulty;
-    }
-    
 
     private void Start() 
     {
@@ -63,14 +53,10 @@ public class AppleTree : MonoBehaviour
     {   
         if(Random.value < _settings.chanceToChangeDirections)
         {
-            velocity *= -1;
+            _velocity *= -1;
         }
     }
-    
-    private void OnDisable() {
-        ScoreManager.NextLevel -= IncreaseDifficulty;
 
-    }
     #endregion
 
 
@@ -81,22 +67,20 @@ public class AppleTree : MonoBehaviour
     /// </summary>
     private void MoveRandomly()
     {
-        pos += Vector3.right * velocity * Time.deltaTime;
-
         float edge = Camera.main.ViewportToWorldPoint(Vector3.right).x - 6f;
 
         // Check if the Apple Tree is within the set screen limit, else change it's velocity.
-        if(pos.x < -edge)
+        if(transform.position.x < -edge)
         {
-            velocity = Mathf.Abs(velocity);
+            _velocity = Mathf.Abs(_velocity);
         }
 
-        else if(pos.x > edge)
+        else if(transform.position.x > edge)
         {
-            velocity = -Mathf.Abs(velocity);
+            _velocity = -Mathf.Abs(_velocity);
         }
 
-        transform.position = pos;
+        transform.position += Vector3.right * _velocity * Time.deltaTime;
     }
 
     /// <summary>
@@ -125,19 +109,19 @@ public class AppleTree : MonoBehaviour
                 type = noSticks[ndx];
             }
 
-            AppleSettings appleSettings = APPLE_DICT[type];
+            AppleSettings appleSettings = _appleDict[type];
 
             // Instantiate a new Apple
             GameObject go = Instantiate(_settings.prefabApple) as GameObject;
             Apple ap = go.GetComponent<Apple>();
 
             // Set Apple Settings and initial position
-            ap.transform.position = pos;
-            ap.SetAppleSettings(appleSettings, velocityIncrease);
+            ap.transform.position = transform.position;
+            ap.SetAppleSettings(appleSettings, _velocityIncrease);
 
             // Start the Coroutine
             float waitingTime = ap.settings.secondsBetweenAppleDrops;
-            yield return new WaitForSeconds(waitingTime - waitingTimeIncrease);
+            yield return new WaitForSeconds(waitingTime + _waitingTimeModifier);
         }
     }
 
@@ -145,10 +129,31 @@ public class AppleTree : MonoBehaviour
 
     #region Event Functions
 
-    private void IncreaseDifficulty(){
-        velocityIncrease += 1.5f;
-        waitingTimeIncrease += 0.25f;
+    #endregion
+
+    public float velocity
+    {
+        get
+        {
+            return _velocity;
+        }
+        set
+        {
+            _velocity = value;
+        }
     }
 
-    #endregion
+    public float waitingTimeModifier
+    {
+        get
+        {
+            return _waitingTimeModifier;
+        }
+        set
+        {
+            _waitingTimeModifier = value;
+        }
+    }
+    
+    
 }

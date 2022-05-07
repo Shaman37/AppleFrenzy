@@ -12,9 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05067dd410f77c848a8bdb4ac97dff38, type: 3}
   m_Name: AppleTreeSettings
   m_EditorClassIdentifier: 
-  screenLimit: 26
-  treeVelocity: 10
-  chanceToChangeDirections: 0.0001
+  treeVelocity: 15
+  chanceToChangeDirections: 0.0002
   lives: 3
   prefabApple: {fileID: 804103507378644030, guid: 96355a282e0cd3c4c83f4590935c1982, type: 3}
   appleFrequency: 0000000000000000000000000100000001000000020000000300000003000000040000000400000004000000

@@ -12,10 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31d325572aa8efd43a9fd35aed8b2728, type: 3}
   m_Name: GoldenAppleSettings
   m_EditorClassIdentifier: 
-  prefab: {fileID: 804103507378644030, guid: 96355a282e0cd3c4c83f4590935c1982, type: 3}
   type: 2
   sprite: {fileID: 21300000, guid: bbf3d451c92de1b44930a79d14a37b6d, type: 3}
   score: 500
   dropPenalty: 150
-  velocity: 6
+  velocity: 7
   secondsBetweenAppleDrops: 1.25

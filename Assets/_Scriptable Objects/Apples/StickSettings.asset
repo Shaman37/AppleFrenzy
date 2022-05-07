@@ -12,10 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31d325572aa8efd43a9fd35aed8b2728, type: 3}
   m_Name: StickSettings
   m_EditorClassIdentifier: 
-  prefab: {fileID: 804103507378644030, guid: 96355a282e0cd3c4c83f4590935c1982, type: 3}
   type: 4
   sprite: {fileID: 21300000, guid: f973578be55867245b3696a7cd32279a, type: 3}
   score: -1000
   dropPenalty: 0
-  velocity: 3
+  velocity: 6
   secondsBetweenAppleDrops: 0.75

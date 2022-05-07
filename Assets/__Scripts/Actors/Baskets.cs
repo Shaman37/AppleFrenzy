@@ -20,11 +20,61 @@ public class Baskets : MonoBehaviour
     private bool             isRotationClockwise = false;
     private float            screenLimit;
 
+    private bool _inCatchAnimation = false;
+
+    bool expanding = false;
+    bool retracting = false;
+
+    float _expandingTimeStart;
+    public float _expandingDuration = 0.15f;
+
+    float _retractingTimeStart;
+    public float _retractingDuration = 0.1f;
+
+    private void BasketCatchAnimation()
+    {
+        Vector3 scale = fixedScales[0];
+        Vector3 position = fixedPositions[0];
+        GameObject front = baskets[0];
+
+        if(expanding)
+        {
+            float u = (Time.time - _expandingTimeStart) / _expandingDuration;
+            if (u >= 1)
+            {
+                u = 1;
+                _retractingTimeStart = Time.time;
+                expanding = false;
+                retracting = true;
+            }
+            
+            u = Utils.Ease(u, Utils.EasingType.easeIn);
+            front.transform.localScale = Vector3.Lerp(scale, scale + new Vector3(2, 4), u);
+            front.transform.localPosition = Vector3.Lerp(position, position + Vector3.down, u);
+        }
+
+        if(retracting)
+        {
+            float u = (Time.time - _retractingTimeStart) / _retractingDuration;
+            u = Utils.Ease(u, Utils.EasingType.easeIn);
+            if (u >= 1)
+            {
+                u = 1;
+                retracting = false;
+                _inCatchAnimation = false;
+            }
+
+            u = Utils.Ease(u, Utils.EasingType.easeIn);
+            front.transform.localScale = Vector3.Lerp(scale + new Vector3(2, 4), scale, u);
+            front.transform.localPosition = Vector3.Lerp(position + Vector3.down, position, u);
+        }
+    }
+
     #endregion
 
 
     #region Unity Event Methods
-        
+
     private void Awake()
     {
         int ndx = 0;
@@ -44,6 +94,8 @@ public class Baskets : MonoBehaviour
             screenLimit = Camera.main.ViewportToWorldPoint(Vector3.right).x - 6f;
             HandleMouseMovement();
             HandleMouseInput();
+
+            if (_inCatchAnimation) BasketCatchAnimation();
         }
     }
 
@@ -62,10 +114,15 @@ public class Baskets : MonoBehaviour
         
         if(collidedWith.tag == "Apple") 
         {
-            Apple ap = collidedWith.GetComponent<Apple>();
-            ScoreManager.OnAppleCaught(ap.settings.score);
+            Apple apple = collidedWith.GetComponent<Apple>();            
+            Messenger<int>.Broadcast(GameEvent.APPLE_CAUGHT, apple.settings.score);
 
             Destroy(collidedWith);
+
+            _inCatchAnimation = true;
+            expanding = true;
+            retracting = false;
+            _expandingTimeStart = Time.time;
         } 
     }
 
@@ -85,7 +142,8 @@ public class Baskets : MonoBehaviour
     
         Vector3 mousePos3D = Camera.main.ScreenToWorldPoint(mousePos2D);
         Vector3 pos = transform.position;
-        pos.x = mousePos3D.x;
+        float x = Mathf.Lerp(pos.x, mousePos3D.x, settings.moveSpeed);
+        pos.x = x;
 
         if (pos.x < -screenLimit)
         {
@@ -122,7 +180,6 @@ public class Baskets : MonoBehaviour
                 isRotationClockwise = false;
             }
         }
-
         else
         {
             SwapBaskets();
@@ -142,6 +199,7 @@ public class Baskets : MonoBehaviour
         int idxLeft = isRotationClockwise ? 2 : 0;
         int idxRight = isRotationClockwise ? 0 : 1;
 
+        _inCatchAnimation = false;
         float u = (Time.time - swapStart) / settings.swapDuration;
         if(u >= 1)
         {
@@ -183,6 +241,8 @@ public class Baskets : MonoBehaviour
         basket.transform.localPosition = Vector3.Lerp(basket.transform.localPosition, fixedPositions[idx], u);
         basket.transform.localScale = Vector3.Lerp(basket.transform.localScale, fixedScales[idx], u);
     }
+
+    
 
     #endregion
 }

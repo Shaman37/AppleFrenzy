@@ -12,10 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31d325572aa8efd43a9fd35aed8b2728, type: 3}
   m_Name: GreenAppleSettings
   m_EditorClassIdentifier: 
-  prefab: {fileID: 804103507378644030, guid: 96355a282e0cd3c4c83f4590935c1982, type: 3}
   type: 0
   sprite: {fileID: 21300000, guid: c5be2b9c861eb434f979eac8760a3b64, type: 3}
   score: 100
   dropPenalty: 50
-  velocity: 4
+  velocity: 5
   secondsBetweenAppleDrops: 0.75

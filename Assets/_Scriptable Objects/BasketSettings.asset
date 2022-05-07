@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d83bb03ce097ea46a025a0ea8882369, type: 3}
   m_Name: BasketSettings
   m_EditorClassIdentifier: 
-  leftAndRightEdge: 38
   swapDuration: 0.2
+  moveSpeed: 0.25

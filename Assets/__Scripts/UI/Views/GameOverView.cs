@@ -19,11 +19,11 @@ public class GameOverView : BaseView
 
 
     private void OnEnable() {
-        ScoreManager.DisplayGameInfo += DisplayInfo;
+        Messenger<int[]>.AddListener(GameEvent.GAME_STATS_DISPLAY, DisplayInfo);
     }
 
     private void OnDisable() {
-        ScoreManager.DisplayGameInfo -= DisplayInfo;
+        Messenger<int[]>.RemoveListener(GameEvent.GAME_STATS_DISPLAY, DisplayInfo);
     }
 
     private void DisplayInfo(int[] info) 

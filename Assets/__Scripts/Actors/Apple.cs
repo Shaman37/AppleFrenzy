@@ -25,13 +25,14 @@ public class Apple : MonoBehaviour
     private SpriteRenderer _spriteRenderer;
     private float          _bottomY;
     private float          _maxAppleX;
+    private float          _windSpeedModifier = 2f;
 
-    
+
     #endregion
 
 
     #region Unity Event Methods
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -59,7 +60,8 @@ public class Apple : MonoBehaviour
             // Checks if dropped apple is not a Spoiled Apple or a Stick
             if (settings.score > 0 && appleX < _maxAppleX)
             {
-                ScoreManager.OnAppleDropped(settings.dropPenalty);
+                //ScoreManager.OnAppleDropped(settings.dropPenalty);
+                Messenger<int>.Broadcast(GameEvent.APPLE_DROPPED, settings.dropPenalty);
             }
 
             Destroy(gameObject);
@@ -68,9 +70,11 @@ public class Apple : MonoBehaviour
 
     private void FixedUpdate()
     {
+        _rigid.AddForce(Vector3.down * settings.velocity);
+
         // If windy, add a horizontal force to the apple
         if(Wind.IS_WINDY){
-            _rigid.AddForce(Vector3.right * 7.5f * _rigid.mass);
+            _rigid.AddForce(Vector3.right * _windSpeedModifier);
         }
     }
 

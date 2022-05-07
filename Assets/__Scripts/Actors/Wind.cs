@@ -5,7 +5,10 @@ using UnityEngine;
 /// </summary>
 public class Wind : MonoBehaviour
 {
-    #region Variables
+    
+    #region Fields
+
+    static public bool IS_WINDY = false;
         
     [Header("Settings")]
     [SerializeField] WindSettings settings;
@@ -14,8 +17,6 @@ public class Wind : MonoBehaviour
     private ParticleSystem.VelocityOverLifetimeModule pVelocity;
     private float                                     readyTime;
     private float                                     stopTime;
-    public static bool                                IS_WINDY = false;
-
 
     #endregion
 
@@ -24,7 +25,7 @@ public class Wind : MonoBehaviour
         
     private void Awake()
     {
-        readyTime = settings.windCooldownTime;
+        readyTime = Time.time + settings.windCooldownTime;
         ParticleSystem pSystem = gameObject.GetComponent<ParticleSystem>();
         pEmission = pSystem.emission;
         pVelocity = pSystem.velocityOverLifetime;

@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7335756992225707438}
-  - component: {fileID: 7335756992225707437}
+  - component: {fileID: 291680864456420360}
   m_Layer: 6
   m_Name: AppleTree
   m_TagString: Tree
@@ -31,7 +31,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7335756992225707437
+--- !u!114 &291680864456420360
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -40,7 +40,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7335756992225707439}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f38842bef34ff04f9ab4250f8b1a210, type: 3}
+  m_Script: {fileID: 11500000, guid: 66dce0012691dc148ac27e451de16ee8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _settings: {fileID: 11400000, guid: b3b4a29c98683a0499eca68563d7f6e0, type: 2}
@@ -50,3 +50,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d151dfed01768bd44919ac9dc50f59d7, type: 2}
   - {fileID: 11400000, guid: 7da049eef133f8d4793a4c258285301e, type: 2}
   - {fileID: 11400000, guid: 019f1923185e76d49932b41b27b3728b, type: 2}
+  _prefabApple: {fileID: 804103507378644030, guid: 96355a282e0cd3c4c83f4590935c1982, type: 3}
