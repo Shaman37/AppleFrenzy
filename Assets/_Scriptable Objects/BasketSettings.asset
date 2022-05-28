@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: BasketSettings
   m_EditorClassIdentifier: 
   swapDuration: 0.2
-  moveSpeed: 0.25
+  shakeDuration: 0.2

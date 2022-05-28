@@ -1,18 +1,24 @@
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
+using System;
+using System.Collections;
 
 public class ComboBar : MonoBehaviour
 {   
-    [Header("Gradient Effect Settings")]
-    [SerializeField] private float gradientSpeed = 10;
+    #region [0] - Fields
 
-    // UI Variables
-    private Text _textScore;
-    private Text _textCombo;
-    private Image _comboProgressBar;
-    private RectTransform _progressEdge;
-    private RectTransform _comboParticlesEdge;
-    private ParticleSystemRenderer _comboParticles;
+    [Header("Rainbow Gradient Settings")]
+    [SerializeField] private float _gradientSpeed = 10;
+    [SerializeField] private float _colorChangeInterval;
+
+    [Header("UI Variables")]
+    [SerializeField] private Text _textScore;
+    [SerializeField] private Text _textCombo;
+    [SerializeField] private Image _comboProgressBar;
+    [SerializeField] private RectTransform _progressEdge;
+    [SerializeField] private RectTransform _comboParticlesEdge;
+    [SerializeField] private ParticleSystemRenderer _comboParticles;
 
     // Progress Bar Color Change fields
     private float _hue;
@@ -27,59 +33,77 @@ public class ComboBar : MonoBehaviour
     private Vector3 _previousAnchorPosition;
     private Vector2 _currentCombo;
 
+    #endregion
+
+    #region [1] - Unity Event Methods
+
+    private void Awake()
+    {
+        if (_comboProgressBar == null) Debug.LogError("Combo Progress Bar Image not found!");
+        if (_progressEdge == null) Debug.LogError("Combo Progress Bar Rect Transform not found!");
+        if (_comboParticlesEdge == null) Debug.LogError("Combo Particles Rect Transform not found!");
+        if (_comboParticles == null) Debug.LogError("Combo Particle System Renderer not found!");
+        if (_textCombo == null) Debug.LogError("Text Combo not found!");
+        if (_textScore == null) Debug.LogError("Text Score not found!");
+    }
+
     private void Start()
     {
-        // Combo Progress
-        _comboProgressBar = transform.Find("Combo Progress").GetComponent<Image>();
-        _progressEdge = _comboProgressBar.GetComponent<RectTransform>();
-        
-        // Combo Particles fields
-        _comboParticlesEdge = _comboProgressBar.transform.Find("Combo Particles").GetComponent<RectTransform>();
-        _comboParticles = _comboParticlesEdge.GetComponent<ParticleSystemRenderer>();
         _comboParticles.gameObject.SetActive(false);
-
-        // Text Objects
-        _textCombo = transform.Find("Combo Multiplier").GetComponent<Text>();
-        _textScore = transform.Find("Score").GetComponent<Text>();
+        StartCoroutine(ComboBarColorChange());
     }
 
-    private void Update()
-    {   
-        if (_inProgressAnimation)
-        {
-            float u = (Time.time - _progressAnimationStart) / _progressAnimationDuration;
-            if(u >= 1)
-            {
-                u = 1;
-                _inProgressAnimation = false;
-            }
+    private IEnumerator ComboBarColorChange()
+    {
+        while(true) 
+        { 
+            // Calculate the new color for both the combo progress bar and particles
+            Color.RGBToHSV(_comboProgressBar.color, out _hue, out _sat, out _bri);
 
+            _hue += _gradientSpeed / 7500;
+            if(_hue >= 1) _hue = 0;
 
-            // Lerp fill amount increase
-            u = Utils.Ease(u, Utils.EasingType.easeIn);
-            _comboProgressBar.fillAmount = Mathf.Lerp(_previousFillAmount, _currentCombo.x / (_currentCombo.y * 10), u);
+            Color newColor = Color.HSVToRGB(_hue, _sat , _bri);
 
-            // Calculate new Anchor Position
-            Vector3 newAnchor = _previousAnchorPosition;
-            newAnchor.x = - _progressEdge.rect.width / 2;
-            newAnchor.x += _progressEdge.rect.width * _comboProgressBar.fillAmount;
+            _comboProgressBar.DOColor(newColor, 1f);
 
-            u = Utils.Ease(u, Utils.EasingType.easeOut);
-            _comboParticlesEdge.anchoredPosition = Vector3.Lerp(_previousAnchorPosition, newAnchor, u);
+            yield return new WaitForSeconds(1f);
         }
-        // Update particles anchor position
-        
-
-        // Calculate the new color for both the combo progress bar and particles
-        Color.RGBToHSV(_comboProgressBar.color, out _hue, out _sat, out _bri);
-
-        _hue += gradientSpeed / 7500;
-        if(_hue >= 1) _hue = 0;
-
-        _comboProgressBar.color = Color.HSVToRGB(_hue, _sat, _bri);
-        _comboParticles.material.color = Color.HSVToRGB(_hue, _sat , _bri);
     }
 
+    private void ProgressBarAnimation()
+    {
+        UpdateComboProgress();
+        UpdateParticlesAnchor();
+    }
+
+    private void UpdateParticlesAnchor()
+    {
+        Vector3 newAnchor = _comboParticlesEdge.anchoredPosition;
+        newAnchor.x = -(_progressEdge.rect.width / 2);
+        newAnchor.x += _progressEdge.rect.width * _comboProgressBar.fillAmount;
+
+        _comboParticlesEdge.DOAnchorPos(newAnchor, 0.2f).SetEase(Ease.InSine);
+    }
+
+    private void UpdateComboProgress()
+    {
+        _previousFillAmount = _comboProgressBar.fillAmount;
+        float newFillAmount = _currentCombo.x / (_currentCombo.y * 10);
+
+        _comboProgressBar.DOFillAmount(newFillAmount, 0.2f).SetEase(Ease.InSine);
+    }
+
+    #endregion
+
+    #region [2] - UI Update Methods
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="progress"></param>
+    /// <param name="multiplier"></param>
+    /// <param name="updateMultiplier"></param>
     public void UpdateComboText(int progress, int multiplier, bool updateMultiplier)
     {   
         // Handle particles 
@@ -92,19 +116,22 @@ public class ComboBar : MonoBehaviour
             _comboParticles.gameObject.SetActive(false);
         }
 
-        // Calculate fill amount of the progress bar, based on current combo stats
-        _progressAnimationStart = Time.time;
-        _inProgressAnimation = true;
-        _previousFillAmount = _comboProgressBar.fillAmount;
-        _previousAnchorPosition = _comboParticlesEdge.anchoredPosition;
         _currentCombo = new Vector2(progress, multiplier);
 
         // Check if a new multiplier was achieved
         if (updateMultiplier) _textCombo.text = "x" + multiplier;
+
+        ProgressBarAnimation();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="score"></param>
     public void UpdateScoreText(int score)
     {   
         _textScore.text = score.ToString();
     }
+    
+    #endregion
 }

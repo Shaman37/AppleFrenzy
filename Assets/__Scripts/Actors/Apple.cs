@@ -17,21 +17,18 @@ public enum eAppleType
 /// </summary>
 public class Apple : MonoBehaviour
 {
-    #region Variables
-        
-    // Variables
-    private AppleSettings  _settings;
+    #region [0] - Fields
+
+    public AppleSettings  settings;
     private Rigidbody      _rigid;
     private SpriteRenderer _spriteRenderer;
     private float          _bottomY;
     private float          _maxAppleX;
     private float          _windSpeedModifier = 2f;
 
-
     #endregion
 
-
-    #region Unity Event Methods
+    #region [1] - Unity Event Methods
 
     /// <summary>
     /// 
@@ -49,6 +46,9 @@ public class Apple : MonoBehaviour
     /// </summary>
     private void Start()
     {   
+        if(_rigid == null) Debug.LogError("Rigid body for apple not found");
+        if(_spriteRenderer == null) Debug.LogError("Sprite REnderer for apple not found");
+
         SetAppleSettings(settings);
     }
 
@@ -56,12 +56,12 @@ public class Apple : MonoBehaviour
     {
         if(transform.position.y < _bottomY)
         {
-            float appleX = Mathf.Abs(transform.position.x);
-            // Checks if dropped apple is not a Spoiled Apple or a Stick
-            if (settings.score > 0 && appleX < _maxAppleX)
+            bool isWithinBounds = Mathf.Abs(transform.position.x) < _maxAppleX ;
+            bool isGoodApple = settings.score > 0;
+
+            if (isGoodApple && isWithinBounds)
             {
-                //ScoreManager.OnAppleDropped(settings.dropPenalty);
-                Messenger<int>.Broadcast(GameEvent.APPLE_DROPPED, settings.dropPenalty);
+                Messenger<int>.Broadcast(GameEvents.APPLE_DROPPED, settings.dropPenalty);
             }
 
             Destroy(gameObject);
@@ -72,7 +72,6 @@ public class Apple : MonoBehaviour
     {
         _rigid.AddForce(Vector3.down * settings.velocity);
 
-        // If windy, add a horizontal force to the apple
         if(Wind.IS_WINDY){
             _rigid.AddForce(Vector3.right * _windSpeedModifier);
         }
@@ -80,42 +79,25 @@ public class Apple : MonoBehaviour
 
     #endregion
     
-
-    #region Methods
+    #region [2] - Methods
 
     /// <summary>
     ///     Responsible for setting up an Apple after it is Instantiated.
+    ///     Increase Apple's velocity depending on the current level and 
+    ///     adds a bit of horizontal velocity at the beggining of the drop
     /// </summary>
     /// <param name="appleSettings">The Settings scriptable object associated to the instantiated Apple Type.</param>
+    /// <param name="difficultyVelocityIncrease">Represents the velocity increase on the apple, according to the current dificulty level</param>
     public void SetAppleSettings(AppleSettings appleSettings, float difficultyVelocityIncrease = 0)
     {
         settings = appleSettings;
         _spriteRenderer.sprite = settings.sprite;
         gameObject.layer = LayerMask.NameToLayer(settings.type.ToString());
-
-        // Adds a bit of horizontal velocity at the beggining of the drop
-        _rigid.velocity += Vector3.right * Random.Range(-2f, 2f);
-
-        // Increase Apple's velocity depending on the current level
-        _rigid.velocity += Vector3.down * difficultyVelocityIncrease;
-    }
-
-    #endregion
-
-
-    #region Properties
         
-    public AppleSettings settings
-    {
-        get 
-        { 
-            return _settings; 
-        }
-        set 
-        {
-            _settings = value; 
-        }
+        Vector3 horizontalVel = Vector3.right * Random.Range(-2f, 2f);
+        Vector3 dropVel = Vector3.down * difficultyVelocityIncrease;
+        _rigid.velocity = horizontalVel + dropVel;
     }
-    
+
     #endregion
 }   

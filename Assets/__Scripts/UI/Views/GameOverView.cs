@@ -7,7 +7,6 @@ using TMPro;
 /// </summary>
 public class GameOverView : BaseView
 {
-
     // UI Variables
     [SerializeField] private TextMeshProUGUI textApplesCaught;
     [SerializeField] private TextMeshProUGUI textScore;
@@ -19,11 +18,11 @@ public class GameOverView : BaseView
 
 
     private void OnEnable() {
-        Messenger<int[]>.AddListener(GameEvent.GAME_STATS_DISPLAY, DisplayInfo);
+        Messenger<int[]>.AddListener(GameEvents.GAME_STATS_DISPLAY, DisplayInfo);
     }
 
     private void OnDisable() {
-        Messenger<int[]>.RemoveListener(GameEvent.GAME_STATS_DISPLAY, DisplayInfo);
+        Messenger<int[]>.RemoveListener(GameEvents.GAME_STATS_DISPLAY, DisplayInfo);
     }
 
     private void DisplayInfo(int[] info) 

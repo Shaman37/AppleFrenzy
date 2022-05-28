@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4611565435392817776}
   - component: {fileID: 4611565435392817779}
   - component: {fileID: 4611565435392817773}
+  - component: {fileID: 65158565730758114}
   m_Layer: 12
   m_Name: RedBasket
   m_TagString: Untagged
@@ -96,6 +97,21 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.25, y: 0.3, z: 1}
   m_Center: {x: -0.01, y: -0.02, z: 0}
+--- !u!114 &65158565730758114
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4611565435392817777}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e24d5a11f3890ef4e973a967630ef1e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  placement: 0
+  position: {x: 0, y: 0, z: 0}
+  scale: {x: 0, y: 0, z: 0}
 --- !u!1 &4611565435940260637
 GameObject:
   m_ObjectHideFlags: 0
@@ -107,6 +123,7 @@ GameObject:
   - component: {fileID: 4611565435940260636}
   - component: {fileID: 4611565435940260639}
   - component: {fileID: 4611565435940260633}
+  - component: {fileID: 3219528781537921656}
   m_Layer: 13
   m_Name: GoldenBasket
   m_TagString: Untagged
@@ -192,6 +209,21 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.25, y: 0.3, z: 1}
   m_Center: {x: -0.01, y: -0.02, z: 0}
+--- !u!114 &3219528781537921656
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4611565435940260637}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e24d5a11f3890ef4e973a967630ef1e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  placement: 0
+  position: {x: 0, y: 0, z: 0}
+  scale: {x: 0, y: 0, z: 0}
 --- !u!1 &4611565436078170612
 GameObject:
   m_ObjectHideFlags: 0
@@ -203,6 +235,7 @@ GameObject:
   - component: {fileID: 4611565436078170615}
   - component: {fileID: 4611565436078170614}
   - component: {fileID: 4611565436078170611}
+  - component: {fileID: 4838612106560638668}
   m_Layer: 11
   m_Name: GreenBasket
   m_TagString: Untagged
@@ -288,6 +321,21 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.25, y: 0.3, z: 1}
   m_Center: {x: -0.01, y: -0.02, z: 0}
+--- !u!114 &4838612106560638668
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4611565436078170612}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e24d5a11f3890ef4e973a967630ef1e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  placement: 0
+  position: {x: 0, y: 0, z: 0}
+  scale: {x: 0, y: 0, z: 0}
 --- !u!1 &4611565436753379898
 GameObject:
   m_ObjectHideFlags: 0
@@ -299,6 +347,7 @@ GameObject:
   - component: {fileID: 4611565436753379893}
   - component: {fileID: 4611565436753379895}
   - component: {fileID: 5673032737193842192}
+  - component: {fileID: 843222788110156646}
   m_Layer: 0
   m_Name: Baskets
   m_TagString: Baskets
@@ -351,4 +400,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba0ff9daccc64204f80262a089c83930, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  settings: {fileID: 11400000, guid: a970f264fd928f349871fbe5566118e6, type: 2}
+  _settings: {fileID: 0}
+--- !u!114 &843222788110156646
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4611565436753379898}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5565eb88795b7de4380dbf9d586ea92d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baskets: {fileID: 0}
+  moveSpeed: 0.5

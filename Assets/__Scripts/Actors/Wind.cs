@@ -1,59 +1,63 @@
 using UnityEngine;
 
 /// <summary>
-///     Class responsible for Wind Behaviour.
+///     Class responsible for creating gusts of wind throughout the game and controlling
+///     the associated Particle System.
 /// </summary>
 public class Wind : MonoBehaviour
 {
-    
-    #region Fields
+    #region [0] - Fields
 
     static public bool IS_WINDY = false;
         
     [Header("Settings")]
-    [SerializeField] WindSettings settings;
+    [SerializeField] private WindSettings _settings;
+    [SerializeField] private ParticleSystem _particleSystem;
 
-    private ParticleSystem.EmissionModule             pEmission;
-    private ParticleSystem.VelocityOverLifetimeModule pVelocity;
-    private float                                     readyTime;
-    private float                                     stopTime;
+    private ParticleSystem.EmissionModule             _particleEmission;
+    private ParticleSystem.VelocityOverLifetimeModule _particleVelocity;
+    private float                                     _readyTime;
+    private float                                     _stopTime;
 
     #endregion
 
-
-    #region Unity Event Methods
+    #region [1] - Unity Event Methods
         
     private void Awake()
     {
-        readyTime = Time.time + settings.windCooldownTime;
-        ParticleSystem pSystem = gameObject.GetComponent<ParticleSystem>();
-        pEmission = pSystem.emission;
-        pVelocity = pSystem.velocityOverLifetime;
+        _readyTime = Time.time + _settings.windCooldownTime;
+
+        if (_particleSystem == null)
+        {
+            Debug.LogError("Particle System not assigned in 'Wind.cs' !");
+        }
+        else
+        {
+            _particleEmission = _particleSystem.emission;
+            _particleVelocity = _particleSystem.velocityOverLifetime; 
+        }
     }
 
     private void FixedUpdate()
     {
-        if(readyTime < Time.time)
+        if(_readyTime < Time.time)
         {
             WindChance();
         }
         else
         {
-            if(Time.time > stopTime)
+            if(Time.time > _stopTime)
             {
                 IS_WINDY = false;
 
                 // Return the number of leaf particles and their velocity to normal
-                pEmission.rateOverTime = settings.normalLeafParticles;
-                pVelocity.xMultiplier = settings.normalVelocity;
+                _particleEmission.rateOverTime = _settings.normalLeafParticles;
+                _particleVelocity.xMultiplier = _settings.normalVelocity;
             }
         }
     }
 
     #endregion
-
-
-    #region Methods
         
     /// <summary>
     ///     Responsible for spawning a gust of wind.
@@ -64,25 +68,22 @@ public class Wind : MonoBehaviour
         
         float chance = Random.value;
 
-        if (chance < settings.windChance)
+        if (chance < _settings.windChance)
         {
             IS_WINDY = true;
 
             // Wind StopTime and Cooldown calculations
             float timeStart = Time.time;
-            float windDuration = Random.Range(settings.windDurationMin, settings.windDurationMax);
+            float windDuration = Random.Range(_settings.windDurationMin, _settings.windDurationMax);
 
-            stopTime = timeStart + windDuration;
-            readyTime = timeStart + settings.windCooldownTime;
+            _stopTime = timeStart + windDuration;
+            _readyTime = timeStart + _settings.windCooldownTime;
 
             // Increase leaf particles and velocity across the X axis
-            pEmission.rateOverTime = settings.windyLeafParticles;
+            _particleEmission.rateOverTime = _settings.windyLeafParticles;
             
-            float windVelocity = Random.Range(settings.windVelocityMin, settings.windVelocityMax);
-            pVelocity.xMultiplier = settings.windVelocityMax;
-        }
-        
-    } 
-
-    #endregion
+            float windVelocity = Random.Range(_settings.windVelocityMin, _settings.windVelocityMax);
+            _particleVelocity.xMultiplier = windVelocity;
+        }  
+    }
 }
